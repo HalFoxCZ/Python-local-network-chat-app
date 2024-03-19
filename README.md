@@ -57,4 +57,4 @@ This is a chat app that allows users to chat with each other.
 
 
 - **<h2>Sources:</h2>**
-> - Threadpool: by Kryštof Fábel (Krystof Fabel)[https://github.com/fabelkr/]
+> - Threadpool: by Kryštof Fábel (Krystof Fabel)[https://github.com/fabelkr/](Krystof Fabel)
