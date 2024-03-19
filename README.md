@@ -1,4 +1,4 @@
-# Python-local-network-chat-app
+2# Python-local-network-chat-app
 **<h1>CHAT APP</h1>**
 
 **Description:**
@@ -27,7 +27,7 @@ This is a chat app that allows users to chat with each other.
 > - Features are only for the client.
 > - Any servers above, including ***V 3.2 - alpha*** have GUI loging.
 > - Any server below ***V 3.1 - alpha*** have only terminal loging.
-> - <h3>***V 1.4 - beta***:</h3>
+> - <h3>V 1.4 - beta:</h3>
  > > - User can send messages to other users.
 > > - ***Incompatible*** with server ***V 3.1 - alpha*** and above.
 > > - Chat ***doesn't*** show who sent the message.
@@ -35,7 +35,7 @@ This is a chat app that allows users to chat with each other.
 > > - Really outdated, not recommended to use.
 > > - **Server is not able to download, unuseable.**
 
->  - <h3>***V 2.3 - beta***:</h3>
+>  - <h3>V 2.3 - beta:</h3>
 > > - User can send messages to other users.
 > > - Messages are displayed in the chat window.
 > > - Messages have user adress from witch were sent.
@@ -43,13 +43,13 @@ This is a chat app that allows users to chat with each other.
 > > - All versions above **V 2.3 - beta*** have removed close window exit with typing "exit" in chat.
 > > - Outdated, not recommended to use, but server is still avaible to download and use.
         
->  - <h3>***V 3.1 - alpha***:</h3>
+>  - <h3>V 3.1 - alpha:</h3>
 > > - User can send messages to other users.
 > > - Messages are displayed in the chat window.
 > > - Messages have user`s name who sent them.
 > > - Compatible with server ***V 3.1 - alpha*** and above.
 
->  - <h3>***V 3.2 - alpha***:</h3>
+>  - <h3>V 3.2 - alpha:</h3>
 > > - Same as ***V 3.1 - alpha***.
 > > - Added close window button to close the app.
 > > - Compatible with server ***V 3.1 - alpha*** and above.
@@ -57,4 +57,4 @@ This is a chat app that allows users to chat with each other.
 
 
 - **<h2>Sources:</h2>**
-> - Threadpool: by Kryštof Fábel ()
+> - Threadpool: by Kryštof Fábel (Krystof Fabel)[https://github.com/fabelkr/]
