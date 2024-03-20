@@ -8,7 +8,8 @@ This is a chat app that allows users to chat with each other.
 > - **Server:**
 > > - Download the server from the repository.
 > > - Run the server.
-> > - Server is now running and ready to accept connections from uo to 25 clients.
+> > - Server is now running and ready to accept connections from uo to 50 clients.
+> > - can be edited by increasing mumber in the **SERVER** file on line `tPool = tPool(100)` . Each client need 2 threads, soo  that needs to be in incremeants of 2.
 > > - Each server is compatible with the same main version of the client.
 > > - Server is ***not compatible*** with clients from different main versions.
 > > - <u>Server is compatible with clients from different subversions.</u>
