@@ -1,4 +1,4 @@
-
+9
 **<h1>CHAT APP</h1>**
 
 **Description:**
@@ -57,4 +57,4 @@ This is a chat app that allows users to chat with each other.
 
 
 - **<h2>Sources:</h2>**
-> - Threadpool: by [Kryštof Fábel](https://github.com/fabelkr)
+> -the threadpool (Threadpool.py) was coded by [Kryštof Fábel](https://github.com/fabelkr)
