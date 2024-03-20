@@ -53,6 +53,7 @@ This is a chat app that allows users to chat with each other.
 >  - <h3>V 3.2 - alpha:</h3>
 > > - Same as ***V 3.1 - alpha***.
 > > - Added close window button to close the app.
+> > - User`s name is displayed in the chat window.
 > > - Compatible with server ***V 3.1 - alpha*** and above.
 
 
