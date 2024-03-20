@@ -2,7 +2,7 @@ import socket
 from threading import Thread
 from threadpool import ThreadPool as tPool
 
-tPool = tPool(50)
+tPool = tPool(100)
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
