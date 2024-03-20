@@ -8,7 +8,7 @@ This is a chat app that allows users to chat with each other.
 > - **Server:**
 > > - Download the server from the repository.
 > > - Run the server.
-> > - Server is now running and ready to accept connections.
+> > - Server is now running and ready to accept connections from uo to 25 clients.
 > > - Each server is compatible with the same main version of the client.
 > > - Server is ***not compatible*** with clients from different main versions.
 > > - <u>Server is compatible with clients from different subversions.</u>
@@ -17,7 +17,7 @@ This is a chat app that allows users to chat with each other.
 > >- Download the client from the repository.
 > > - If server is running, run the client.
 > > - If server is not running, run the server first and then the client.
-> > - Client is now running and ready to connect to the server.
+> > - Client is now running and connected to the server.
 > > - Each client is compatible with the same main version of the server.
 > > - Client is ***not compatible*** with servers from different main versions.
 > > - Client is compatible with servers from different subversions.
