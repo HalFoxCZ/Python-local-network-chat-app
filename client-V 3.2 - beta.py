@@ -20,7 +20,7 @@ while True:
             print("No ports available.")
             exit(0)
             break
-    time.sleep(0.5)
+    time.sleep(0.2)
 
 server_addr = s.getpeername()
 
@@ -33,6 +33,12 @@ def receive_messages(client_socket):
             elif message.decode('ascii') == "||SERVER||REQUEST_LOGIN||" or message.decode('ascii') == "||SERVER||LOGIN||FAILED||":
                 login_label.grid(row=0, column=1, columnspan=1)
                 login_button.grid(row=0, column=6, columnspan=2)
+                close_button.grid(row=10, column=20, columnspan=5)
+                chat_text.grid_forget()
+                input_user.grid_forget()
+                send_button.grid_forget()
+                username_text.set("")
+                username_label.grid()
             else:
 
                 message = message.decode('ascii')
@@ -45,21 +51,35 @@ def receive_messages(client_socket):
             break
 
 def send_message(message, s):
+    input_user.delete("1.0", "end-1c")
     print(message)
     if "||CLIENT||LOGIN||RESPONSE|?|" in message:
+
         login_label.grid_forget()
         login_button.grid_forget()
         chat_text.grid(row=1, column=2000, columnspan=10)
         input_user.grid(row=2, column=1, columnspan=5)
         send_button.grid(row=2, column=6, columnspan=5)
+        username_text.set(message.split("||CLIENT||LOGIN||RESPONSE|?|")[1])
+        username_label.grid(row=0, column=0, columnspan=1)
     s.sendall(message.encode('ascii'))
 
 root = tk.Tk()
 root.title("chat-app")
-root.geometry("500x600")
+root.geometry("700x900")
 
 set_chat_text = tk.StringVar()
 set_chat_text.set("0")
+
+
+username_text = tk.StringVar()
+username_text.set("")
+username_label = tk.Label(
+    root,
+    textvariable=username_text,
+    height=1,
+    width=20,
+)
 
 
 login_label = tk.Text(
@@ -101,6 +121,7 @@ close_button = tk.Button(
 def endApp(root, s):
     s.close()
     root.quit()
+    root.destroy()
 
 
 tPool = tPool(50)

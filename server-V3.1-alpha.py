@@ -3,15 +3,10 @@ from threading import Thread
 from threadpool import ThreadPool as tPool
 
 tPool = tPool(100)
-
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 host = socket.gethostname()
 port = 42069
-
 print(host)
-
-
 
 while True:
     try:
@@ -23,20 +18,14 @@ while True:
         if port > 42099:
             print("No ports available.")
             exit(0)
-
-
 print(serversocket.getsockname())
-
-clientsockets = [
-
-]
-
-clientnames = [
-
-]
+clientsockets = []
+clientnames = []
 
 def login(serversocket, addr, clientnames, clientsocket):
     while True:
+        for client in clientnames:
+            clientsocket.send(b"||SERVER||ONLINE_USER|?|"+client.encode('ascii'))
         clientsocket.send(b"||SERVER||REQUEST_LOGIN||")
         login = clientsocket.recv(1024)
         try:
@@ -60,10 +49,9 @@ def listener(serversocket, clientsocket, clientnames):
         clientsocket, addr = serversocket.accept()
         tPool.add_task(serversocket, addr, clientnames, clientsocket, task=login)
 
+
 def dispatch_message(skt, name, clientsockets):
-
     while True:
-
         try:
             msg = skt.recv(1024)
             msg = msg.decode('ascii')
@@ -74,12 +62,12 @@ def dispatch_message(skt, name, clientsockets):
             msg = "from:"+name+" - message: "+ msg
             print(msg)
             for skt_out in clientsockets:
-
-
-
                 skt_out.send(msg_send.encode('ascii'))
-        except ConnectionResetError:
+        except:
+            clientsockets.remove(skt)
+            clientnames.remove(name)
             print("Connection closed.")
             break
+
 
 tPool.add_task(serversocket, clientsockets, clientnames, task=listener)

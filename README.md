@@ -56,6 +56,26 @@ This is a chat app that allows users to chat with each other.
 > > - User`s name is displayed in the chat window.
 > > - Compatible with server ***V 3.1 - alpha*** and above.
 
+- **<h2>SERVER functions:</h2>**
+> - <h3>variables:</h3>
+> > - `tPool = tPool(100)` - number of threads that server can handle. Each client needs 2 threads.
+> > - `serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)` - creates a socket for the server.
+> > - `host = socket.gethostname()` - gets the host name of the server.
+> > - `port = 42069` - port on which the server is running. Automaticly will be change up to 30 numbers higher if this is used.
+> > - `clientsockets = []` - list of all client sockets that are conected.
+> > - `clientnames = []` - list of all client names that are conected.
+> > 
+> - <h3>functions:</h3>
+>
+> >  - ```def listener(serversocket, clientsocket, clientnames):
+> >   while True:
+> >       serversocket.listen()
+> >       clientsocket, addr = serversocket.accept()
+> >       tPool.add_task(serversocket, addr, clientnames, clientsocket, task=login)
+> >  ```
+> >  - listens for new connections and sends them to login function.
+
+
 
 
 - **<h2>Sources:</h2>**
