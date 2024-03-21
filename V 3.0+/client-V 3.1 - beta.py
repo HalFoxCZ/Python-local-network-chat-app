@@ -29,7 +29,7 @@ def receive_messages(client_socket):
             message = client_socket.recv(1024)
             if not message:
                 break
-            elif message.decode('ascii') == "||SERVER||REQUEST_LOGIN||" or message.decode('ascii') == "||SERVER||LOGIN||FAILED||":
+            elif "||SERVER||REQUEST_LOGIN||" in message.decode('ascii') or "||SERVER||LOGIN||FAILED||" in message.decode('ascii') :
                 login_label.grid(row=0, column=1, columnspan=1)
                 login_button.grid(row=0, column=6, columnspan=2)
             else:
