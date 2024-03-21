@@ -75,9 +75,52 @@ This is a chat app that allows users to chat with each other.
 > >       tPool.add_task(serversocket, addr, clientnames, clientsocket, task=login)
 > >  ```
 > >  - listens for new connections and sends them to login function.
-
-
-
+> > 
+> > ```
+> > def dispatch_message(skt, name, clientsockets):
+> >   while True:
+> >       try:
+> >           msg = skt.recv(1024)
+> >           msg = msg.decode('ascii')
+> >           if  b"||CLIENT||LOGIN||RESPONSE|?|" in msg.encode('ascii'):
+> >               print("conetion attemtp denied from:"+name)
+> >               continue
+> >           msg_send = name+": "+msg
+> >           msg = "from:"+name+" - message: "+ msg
+> >          print(msg)
+> >           for skt_out in clientsockets:
+> >               skt_out.send(msg_send.encode('ascii'))
+> >       except:
+> >           clientsockets.remove(skt)
+> >           clientnames.remove(name)
+> >           print("Connection closed.")
+> >           break
+> > ```
+> > - Recieve and send messages to all clients. If client disconnects, it removes it from the list of clients.
+> > ```
+> > 
+> > def login(serversocket, addr, clientnames, clientsocket):
+> >     while True:
+> >         for client in clientnames:
+> >             clientsocket.send(b"||SERVER||ONLINE_USER|?|"+client.encode('ascii'))
+> >         clientsocket.send(b"||SERVER||REQUEST_LOGIN||")
+> >         login = clientsocket.recv(1024)
+> >         try:
+> >             print(login.decode('ascii').split("|?|")[1])
+> >             name = login.decode('ascii').split("|?|")[1]
+> >             if name in clientnames:
+> >                 clientsocket.send(b"||SERVER||LOGIN||FAILED||")
+> >             else:
+> >                 break
+> >         except IndexError:
+> >             print("Invalid login.")
+> >     clientsockets.append(clientsocket)
+> >     clientnames.append(name)
+> >     print("Connection from: " + str(addr))
+> >     tPool.add_task(clientsocket, name, clientsockets, task=dispatch_message)
+> > ```
+> >  - Sends all online users to the client and then waits for the login. If login is valid, it adds the client to the list of clients and starts the dispatch_message function.
+> > 
 
 - **<h2>Sources:</h2>**
 > - the threadpool (threadpool.py) was coded by [Kryštof Fábel](https://github.com/fabelkr)
