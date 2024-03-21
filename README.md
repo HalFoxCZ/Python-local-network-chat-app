@@ -67,7 +67,7 @@ This is a chat app that allows users to chat with each other.
 > > 
 > - <h3>functions:</h3>
 >
-> > ```
+> > ``` 
 > >   def listener(serversocket, clientsocket, clientnames):
 > >   while True:
 > >       serversocket.listen()
