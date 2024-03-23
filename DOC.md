@@ -167,20 +167,25 @@
 > > the rest of code is just binding the connection, and setting up GUI of Tkinter nodule
 > 
 <h2>NOTES:</h2>
-> **Versions bellow 3.0** : outdated, first attempts and are not meant to be used. version of 2.x are posible to use, but they are a bit tricky to use, and needs a lot of tweaking
+> **Versions bellow 3.0** : outdated, first attempts and are not meant to be used. version of 2.x are 
+> possible to use, but they are a bit tricky to use, and needs a lot of tweaking
 >
 > **Versions 3.x** : Those versions are good to use, but still have some bugs, and are not fully optimized
 > 
-> **Versions 4.x** : Newes versions, that are fine to use, and I hope should work without any problems (I wasnt able to test them since my parrent issues with my father
-> about admin prilages on my pc and etc.). Any major bugs found in 4.x should and will be 
+> **Versions 4.x** : New versions, that are fine to use, and I hope should work without any problems (I 
+> wasn't able to test them since my parent issues with my father
+> about admin privileges on my pc , and more.). Any major bugs found in 4.x should and will be 
 > repaired in versions 5.x, and all minor bugs will be fixed in versions 6.x
 > <h3>Plans for future versions:</h3>
 > 
 > **versions 5.x** : Those versions would have more optimized user GUI, and add block feature soo you can block annoying peoples.
-> That means annother local file for cleint that will contain blocked users and for how logn they are block
+> That means another local file for client that will contain blocked users and for how 
+> long they are block
 > 
 > **versions 6.x** : those versions would have more optimized, and would fix minor bugs from 4.x and major bugs from 6.x. 
-> Also would be added ban funtion 
-> on server GUI soo admins can permanently or temporaly ban peoples.
-> That would mean there would be new file tha will contain server blocked peoples, and if its temporaly bad then how long 
-> they have to wait to be able to again connect. This would be send to the user who tries to connect and is banned.
+> Also would be added ban function 
+> on server GUI soo admins can permanently or temporally ban peoples.
+> That would mean there would be new file tha will contain server blocked peoples, and if its
+> temporally bad then how long 
+> they have to wait to be able to again connect. This would 
+> be sent to the user who tries to connect and is banned.
