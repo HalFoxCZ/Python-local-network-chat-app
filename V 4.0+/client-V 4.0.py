@@ -2,22 +2,21 @@ import socket
 import threading
 import time
 from threadpool import ThreadPool as tPool
+from client_connect import CONNECT as ct
 import tkinter as tk
-from client_connect import CONNECT as cn
 
 
 server_port = 42069
-
-s = cn.connect_to_server(server_port=server_port)
+s = ct.connect_to_server()
 server_addr = s.getpeername()
 
-def receive_messages(client_socket: socket.socket):
+def receive_messages(client_socket):
     while True:
         try:
             message = client_socket.recv(1024)
             if not message:
                 break
-            elif "||SERVER||REQUEST_LOGIN||" in message.decode('ascii') or "||SERVER||LOGIN||FAILED||" in message.decode('ascii') :
+            elif message.decode('ascii') == "||SERVER||REQUEST_LOGIN||" or message.decode('ascii') == "||SERVER||LOGIN||FAILED||":
                 login_label.grid(row=0, column=1, columnspan=1)
                 login_button.grid(row=0, column=6, columnspan=2)
                 close_button.grid(row=10, column=20, columnspan=5)
@@ -37,7 +36,7 @@ def receive_messages(client_socket: socket.socket):
             print("Connection closed.")
             break
 
-def send_message(message: str, s: socket.socket):
+def send_message(message, s):
     input_user.delete("1.0", "end-1c")
     print(message)
     if "||CLIENT||LOGIN||RESPONSE|?|" in message:
@@ -58,22 +57,51 @@ root.geometry("700x900")
 set_chat_text = tk.StringVar()
 set_chat_text.set("0")
 
+
 username_text = tk.StringVar()
 username_text.set("")
+username_label = tk.Label(
+    root,
+    textvariable=username_text,
+    height=1,
+    width=20,
+)
 
-username_label = tk.Label(root, textvariable=username_text, height=1, width=20)
 
-login_label = tk.Text(root, height=1, width=20)
+login_label = tk.Text(
+    root,
+    height=1,
+    width=20
+)
 
-login_button = tk.Button(root, text="Login", command=lambda: send_message("||CLIENT||LOGIN||RESPONSE|?|"+login_label.get("1.0", "end-1c"), s))
+login_button = tk.Button(
+    root,
+    text="Login",
+    command=lambda: send_message("||CLIENT||LOGIN||RESPONSE|?|"+login_label.get("1.0", "end-1c"), s)
+)
+chat_text = tk.Label(
+    root,
+    textvariable=set_chat_text
+)
 
-chat_text = tk.Label(root, textvariable=set_chat_text)
+input_user = tk.Text(
+    root,
+    height=1,
+    width=20
+)
 
-input_user = tk.Text(root, height=1, width=20)
+send_button = tk.Button(
+    root,
+    text="Send",
+    command=lambda: send_message(input_user.get("1.0", "end-1c"), s)
+)
 
-send_button = tk.Button(root, text="Send", command=lambda: send_message(input_user.get("1.0", "end-1c"), s))
+close_button = tk.Button(
+    root,
+    text="Close",
+    command=lambda: endApp(root, s)
 
-close_button = tk.Button(root, text="Close", command=lambda: endApp(root, s))
+)
 
 
 def endApp(root, s):
