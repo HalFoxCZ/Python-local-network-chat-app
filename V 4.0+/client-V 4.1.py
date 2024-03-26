@@ -3,24 +3,12 @@ import threading
 import time
 from threadpool import ThreadPool as tPool
 import tkinter as tk
+from client_connect import CONNECT as ct
+
 
 
 server_port = 42069
-while True:
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_host = socket.gethostname()
-        s.connect((server_host, server_port))
-        break
-    except:
-        print("Port " + str(server_port) + " is not used")
-        server_port += 1
-
-        if server_port > 42099:
-            print("No ports available.")
-            exit(0)
-    time.sleep(0.2)
-
+s = ct.connect_to_server(server_port)
 server_addr = s.getpeername()
 
 def receive_messages(client_socket):
@@ -40,8 +28,9 @@ def receive_messages(client_socket):
                     send_button.grid_forget()
                     username_text.set("")
                     username_label.grid()
+                    users_label.grid()
                 if "||SERVER||ONLINE_USER|?|" in message.decode('ascii'):
-                    username_text.set(username_text.get()+"\n"+message.decode('ascii').split("||SERVER||ONLINE_USER|?|")[1])
+                    users.set("users:\n"+message.decode('ascii').split("||SERVER||ONLINE_USER|?|")[1])
             else:
 
                 message = message.decode('ascii')
@@ -123,6 +112,15 @@ close_button = tk.Button(
     command=lambda: endApp(root, s)
 
 )
+
+users = tk.StringVar()
+users.set("")
+
+users_label = tk.Label(
+    root,
+    textvariable=users
+)
+
 
 
 def endApp(root, s):

@@ -3,7 +3,8 @@ import time
 
 
 class CONNECT:
-    def connect_to_server(self, server_port: int = 42069, max_port: int = 42099) -> socket.socket:
+    @staticmethod
+    def connect_to_server(server_port: int = 42069, max_port: int = 42099) -> socket.socket:
         while True:
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

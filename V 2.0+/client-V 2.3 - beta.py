@@ -34,7 +34,7 @@ root.title("chat-app")
 root.geometry("500x600")
 
 set_chat_text = tk.StringVar()
-set_chat_text.set("0")
+set_chat_text.set("")
 chat_text = tk.Label(
     root,
     textvariable=set_chat_text

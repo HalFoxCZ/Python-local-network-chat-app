@@ -8,7 +8,7 @@ from client_connect import CONNECT as cn
 
 server_port = 42069
 
-s = cn.connect_to_server(server_port=server_port)
+s = cn.connect_to_server()
 server_addr = s.getpeername()
 
 def receive_messages(client_socket: socket.socket):
@@ -56,7 +56,7 @@ root.title("chat-app")
 root.geometry("700x900")
 
 set_chat_text = tk.StringVar()
-set_chat_text.set("0")
+set_chat_text.set("")
 
 username_text = tk.StringVar()
 username_text.set("")

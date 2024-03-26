@@ -30,15 +30,23 @@ def receive_messages(client_socket):
             message = client_socket.recv(1024)
             if not message:
                 break
-            elif message.decode('ascii') == "||SERVER||REQUEST_LOGIN||" or message.decode('ascii') == "||SERVER||LOGIN||FAILED||":
-                login_label.grid(row=0, column=1, columnspan=1)
-                login_button.grid(row=0, column=6, columnspan=2)
-                close_button.grid(row=10, column=20, columnspan=5)
-                chat_text.grid_forget()
-                input_user.grid_forget()
-                send_button.grid_forget()
-                username_text.set("")
-                username_label.grid()
+            if "||SERVER||REQUEST_LOGIN||" in message.decode(
+                    "ascii") or "||SERVER||LOGIN||FAILED||" in message.decode(
+                    'ascii') or "||SERVER||ONLINE_USER|?|" in message.decode('ascii'):
+
+                if "||SERVER||REQUEST_LOGIN||" in message.decode(
+                        "ascii") or "||SERVER||LOGIN||FAILED||" in message.decode('ascii'):
+                    login_label.grid(row=0, column=1, columnspan=1)
+                    login_button.grid(row=0, column=6, columnspan=2)
+                    close_button.grid(row=10, column=20, columnspan=5)
+                    chat_text.grid_forget()
+                    input_user.grid_forget()
+                    send_button.grid_forget()
+                    username_text.set("")
+                    username_label.grid()
+                if "||SERVER||ONLINE_USER|?|" in message.decode('ascii'):
+                    username_text.set(
+                        username_text.get() + "\n" + message.decode('ascii').split("||SERVER||ONLINE_USER|?|")[1])
             else:
 
                 message = message.decode('ascii')
@@ -70,7 +78,7 @@ root.title("chat-app")
 root.geometry("700x900")
 
 set_chat_text = tk.StringVar()
-set_chat_text.set("0")
+set_chat_text.set("")
 
 
 username_text = tk.StringVar()

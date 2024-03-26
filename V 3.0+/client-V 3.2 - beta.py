@@ -69,7 +69,7 @@ root.title("chat-app")
 root.geometry("700x900")
 
 set_chat_text = tk.StringVar()
-set_chat_text.set("0")
+set_chat_text.set("")
 
 
 username_text = tk.StringVar()

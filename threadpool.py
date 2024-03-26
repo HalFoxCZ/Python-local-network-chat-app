@@ -20,5 +20,9 @@ class ThreadPool:
 
     def wait_completion(self):
         for i in range(self.thread_count):
-            self.threads[i].join()
+            try:
+                self.threads[i].join()
+            except RuntimeError:
+                pass
+            # self.threads[i].join()
 
