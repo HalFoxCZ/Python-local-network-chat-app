@@ -1,141 +1,116 @@
 import socket
-from threading import Thread
+import threading
+import time
 from threadpool import ThreadPool as tPool
+from client_connect import CONNECT as ct
 import tkinter as tk
 
-tPool = tPool(100)
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = socket.gethostname()
-port = 42069
-print(host)
 
-while True:
-    try:
-        serversocket.bind((host, port))
-        break
-    except OSError:
-        print("Port " + str(port) + " is already in use.")
-        port += 1
-        if port > 42099:
-            print("No ports available.")
-            exit(0)
+server_port = 42069
+s = ct.connect_to_server()
+server_addr = s.getpeername()
 
-print(serversocket.getsockname())
-clientsockets = []
-clientnames = []
-
-tk_socket_info = serversocket.getsockname()
-
-tk_socket_info_string = ""
-tk_socket_info_string += "SERVER SOCKET INFO: "
-
-for i in range(len(tk_socket_info)):
-    tk_socket_info_string += str(tk_socket_info[i]) + " "
-
-root = tk.Tk()
-root.title("[SERVER] - Chat app")
-root.geometry("500x600")
-
-tk_server_socket_info = tk.StringVar()
-tk_server_socket_info.set(tk_socket_info_string)
-
-tk_server_socket_info_label = tk.Label(
-    root,
-    textvariable=tk_server_socket_info
-)
-
-tk_online_user_text = tk.StringVar()
-tk_online_user_text.set("USERS ONLINE:")
-
-tk_online_user_label = tk.Label(
-    root,
-    textvariable=tk_online_user_text
-)
-
-tk_server_logging_text = tk.StringVar()
-tk_server_logging_text.set("SERVER LOGGING: ")
-
-tk_server_logging_text_label = tk.Label(
-    root,
-    textvariable=tk_server_logging_text
-)
-
-tk_server_logging = tk.StringVar()
-tk_server_logging.set("")
-
-tk_server_logging_label = tk.Label(
-    root,
-    textvariable=tk_server_logging
-)
-tk_server_socket_info_label.grid(row=0, column=0, columnspan=2)
-tk_online_user_label.grid(row=1, column=0, columnspan=2)
-
-tk_server_logging_text_label.grid(row=2, column=0, columnspan=2)
-tk_server_logging_label.grid(row=3, column=0, columnspan=2)
-
-root.mainloop()
-
-
-def login(addr, clientnames, clientsocket, logging, tk_user_list):
+def receive_messages(client_socket):
     while True:
-        clients_online = ""
-        for client in clientnames:
-            clients_online += client + "\n"
-
-        clientsocket.send(b"||SERVER||REQUEST_LOGIN||AND||SERVER||ONLINE_USER|?|" + clients_online)
-        login = clientsocket.recv(1024)
         try:
-            print(login.decode('ascii').split("|?|")[1])
-            name = login.decode('ascii').split("|?|")[1]
-            if name in clientnames:
-                clientsocket.send(b"||SERVER||LOGIN||FAILED||")
-                logging.set(logging.get() + "\n" + "connection attempt denied from:" + addr)
-            else:
+            message = client_socket.recv(1024)
+            if not message:
                 break
-        except IndexError:
-            print("Invalid login.")
+            elif message.decode('ascii') == "||SERVER||REQUEST_LOGIN||" or message.decode('ascii') == "||SERVER||LOGIN||FAILED||":
+                login_label.grid(row=0, column=1, columnspan=1)
+                login_button.grid(row=0, column=6, columnspan=2)
+                close_button.grid(row=10, column=20, columnspan=5)
+                chat_text.grid_forget()
+                input_user.grid_forget()
+                send_button.grid_forget()
+                username_text.set("")
+                username_label.grid()
+            else:
 
-    clientsockets.append(clientsocket)
-    clientnames.append(name)
-    print("Connection from: " + str(addr))
-    loggin.set(logging.get() + "\n" + name + " have connected.")
-    tPool.add_task(clientsocket, name, clientsockets, task=dispatch_message)
+                message = message.decode('ascii')
 
+                set_chat_text.set(set_chat_text.get()+"\n"+message)
+                print(message)
 
-def listener(serversocket, clientsocket, clientnames, logging, tk_user_list):
-    while True:
-        serversocket.listen()
-        clientsocket, addr = serversocket.accept()
-        tPool.add_task(addr, clientnames, clientsocket, logging, tk_user_list, task=login)
-
-
-def dispatch_message(skt, name, clientsockets, logging, tk_user_list):
-    while True:
-        try:
-            msg = skt.recv(1024)
-            msg = msg.decode('ascii')
-            if b"||CLIENT||LOGIN||RESPONSE|?|" in msg.encode('ascii'):
-                print("connection attempt denied from:" + name)
-                logging.set(logging.get() + "\n" + "connection attempt denied from:" + name)
-                continue
-            msg_send = name + ": " + msg
-            msg = "from:" + name + " - message: " + msg
-            logging.set(logging.get() + "\n" + msg)
-            print(msg)
-            for skt_out in clientsockets:
-                skt_out.send(msg_send.encode('ascii'))
-        except:
-            clientsockets.remove(skt)
-            clientnames.remove(name)
-            list_new = "USERS ONLINE: \n"
-            for client in tk_user_list:
-                if name in client:
-                    continue
-                else:
-                    list_new += client + "\n"
-            print("Connection closed from: " + name)
-            logging.set(logging.get() + "\n" + name + " have disconnected.")
+        except ConnectionResetError:
+            print("Connection closed.")
             break
 
+def send_message(message, s):
+    input_user.delete("1.0", "end-1c")
+    print(message)
+    if "||CLIENT||LOGIN||RESPONSE|?|" in message:
 
-tPool.add_task(serversocket, clientsockets, clientnames, tk_server_logging_label, tk_online_user_label, task=listener)
+        login_label.grid_forget()
+        login_button.grid_forget()
+        chat_text.grid(row=1, column=2000, columnspan=10)
+        input_user.grid(row=2, column=1, columnspan=5)
+        send_button.grid(row=2, column=6, columnspan=5)
+        username_text.set(message.split("||CLIENT||LOGIN||RESPONSE|?|")[1])
+        username_label.grid(row=0, column=0, columnspan=1)
+    s.sendall(message.encode('ascii'))
+
+root = tk.Tk()
+root.title("chat-app")
+root.geometry("700x900")
+
+set_chat_text = tk.StringVar()
+set_chat_text.set("0")
+
+
+username_text = tk.StringVar()
+username_text.set("")
+username_label = tk.Label(
+    root,
+    textvariable=username_text,
+    height=1,
+    width=20,
+)
+
+
+login_label = tk.Text(
+    root,
+    height=1,
+    width=20
+)
+
+login_button = tk.Button(
+    root,
+    text="Login",
+    command=lambda: send_message("||CLIENT||LOGIN||RESPONSE|?|"+login_label.get("1.0", "end-1c"), s)
+)
+chat_text = tk.Label(
+    root,
+    textvariable=set_chat_text
+)
+
+input_user = tk.Text(
+    root,
+    height=1,
+    width=20
+)
+
+send_button = tk.Button(
+    root,
+    text="Send",
+    command=lambda: send_message(input_user.get("1.0", "end-1c"), s)
+)
+
+close_button = tk.Button(
+    root,
+    text="Close",
+    command=lambda: endApp(root, s)
+
+)
+
+
+def endApp(root, s):
+    s.close()
+    root.quit()
+    root.destroy()
+
+
+tPool = tPool(50)
+tPool.add_task(s, task=receive_messages)
+
+root.mainloop()
