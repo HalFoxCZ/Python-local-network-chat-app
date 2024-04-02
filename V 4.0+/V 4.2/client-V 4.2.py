@@ -4,7 +4,7 @@ import time
 from threadpool import ThreadPool as tPool
 import tkinter as tk
 from client_connect import CONNECT as ct
-
+import datetime
 
 server_port = 42069
 s = ct.connect_to_server(server_port)
@@ -34,8 +34,8 @@ def receive_messages(client_socket):
             else:
 
                 message = message.decode('ascii')
-
-                set_chat_text.set(set_chat_text.get()+"\n"+message)
+                time = datetime.datetime.now().strftime("%H:%M:%S")
+                set_chat_text.set(set_chat_text.get()+"\n"+time+"--"+message)
                 print(message)
 
         except:
@@ -56,6 +56,7 @@ def send_message(message, s):
         send_button.grid(row=3, column=0)
         username_text.set(message.split("||CLIENT||LOGIN||RESPONSE|?|")[1])
         username_label.grid(row=0, column=2)
+        users_label.grid(row=0, column=3)
     if message == "":
         pass
     s.sendall(message.encode('ascii'))
@@ -66,7 +67,7 @@ root.title("chat-app")
 root.geometry("700x900+%d+%d" % (root.winfo_screenheight(), 0))
 
 set_chat_text = tk.StringVar()
-set_chat_text.set("0")
+set_chat_text.set("")
 
 root.configure(background="#222")
 
@@ -79,6 +80,7 @@ username_label = tk.Label(
     textvariable=username_text,
     height=1,
     width=20,
+    font=('Comic Sans MS', 12, 'bold italic')
 
 )
 
@@ -88,6 +90,7 @@ login_label = tk.Text(
     height=1,
     width=20,
     borderwidth=2,
+    font=('Comic Sans MS', 12, 'bold italic')
 
 )
 
@@ -95,23 +98,33 @@ login_button = tk.Button(
     root,
     text="Login",
     command=lambda: send_message("||CLIENT||LOGIN||RESPONSE|?|"+login_label.get("1.0", "end-1c"), s),
+    font=('Comic Sans MS', 12, 'bold italic')
 
 )
 chat_text = tk.Label(
     root,
-    textvariable=set_chat_text
+    textvariable=set_chat_text,
+    height=25,
+    width=50,
+    anchor="nw",
+    justify="left",
+    font=('Comic Sans MS', 12, 'bold italic')
+
 )
 
 input_user = tk.Text(
     root,
     height=1,
-    width=20
+    width=20,
+    font=('Comic Sans MS', 12, 'bold italic')
+
 )
 
 send_button = tk.Button(
     root,
     text="Send",
     command=lambda: send_message(input_user.get("1.0", "end-1c"), s),
+    font=('Comic Sans MS', 12, 'bold italic')
 
 )
 
@@ -119,7 +132,7 @@ close_button = tk.Button(
     root,
     text="Close",
     command=lambda: endApp(root, s),
-
+    font=('Comic Sans MS', 12, 'bold italic')
 
 )
 
@@ -129,6 +142,7 @@ users.set("")
 users_label = tk.Label(
     root,
     textvariable=users,
+    font=('Comic Sans MS', 12, 'bold italic')
 
 )
 

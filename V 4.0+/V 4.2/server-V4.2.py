@@ -37,9 +37,6 @@ clientnames = []
 root = tk.Tk()
 root.title("[SERVER] : chat-app")
 
-ttk.Style(root).theme_use("vista")
-print(ttk.Style(root).theme_use())
-print(ttk.Style(root).theme_names())
 w = 1024 # width for the Tk root
 h = 750 # height for the Tk root
 
@@ -74,7 +71,6 @@ clients = tk.Label(
 s = ttk.Style()
 s.theme_names()
 s.theme_use("clam")
-s.theme_use("vista")
 
 socket_info = tk.StringVar()
 socket_info.set("Server socket info: "+str(serversocket.getsockname()))
@@ -120,6 +116,7 @@ close_button = tk.Button(
     font=('Comic Sans MS', 12, 'bold italic')
 )
 
+root.scrollbar = tk.Scrollbar(root)
 
 logging_label = tk.Label(
     root,
