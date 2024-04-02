@@ -2,6 +2,7 @@ import socket
 from threading import Thread
 from threadpool import ThreadPool as tPool
 import tkinter as tk
+import tkinter.ttk as ttk
 from datetime import datetime
 
 
@@ -35,7 +36,25 @@ clientnames = []
 
 root = tk.Tk()
 root.title("[SERVER] : chat-app")
-root.geometry("1024x750")
+
+ttk.Style(root).theme_use("vista")
+print(ttk.Style(root).theme_use())
+print(ttk.Style(root).theme_names())
+w = 1024 # width for the Tk root
+h = 750 # height for the Tk root
+
+# get screen width and height
+ws = root.winfo_screenwidth() # width of the screen
+hs = root.winfo_screenheight() # height of the screen
+
+root.configure(background="#222")
+# calculate x and y coordinates for the Tk root window
+x = 0
+y = 0
+
+# set the dimensions of the screen
+# and where it is placed
+root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 clients_name = tk.StringVar()
 clients_name.set("Users:")
@@ -46,7 +65,16 @@ clients = tk.Label(
     justify="left",
     width= 1024,
     height=15,
+    background="#222",
+    foreground="white",
+    font=('Comic Sans MS', 12, 'bold italic'),
+
 )
+
+s = ttk.Style()
+s.theme_names()
+s.theme_use("clam")
+s.theme_use("vista")
 
 socket_info = tk.StringVar()
 socket_info.set("Server socket info: "+str(serversocket.getsockname()))
@@ -57,6 +85,10 @@ socket_info_label = tk.Label(
     anchor="nw",
     justify="left",
     width= 1024,
+    background="#222",
+    foreground="white",
+    font=('Comic Sans MS', 12, 'bold italic'),
+
 )
 
 logging = tk.StringVar()
@@ -71,6 +103,9 @@ logging_text_label = tk.Label(
     anchor="nw",
     justify="left",
     width= 1024,
+    background="#222",
+    foreground="white",
+    font=('Comic Sans MS', 12, 'bold italic'),
 
 )
 
@@ -78,8 +113,11 @@ close_button = tk.Button(
     root,
     text="Close server",
     command=lambda: closeServer(serversocket),
-    anchor="nw",
-    justify="left",
+    background="#222",
+    foreground="white",
+    height=2,
+    width=15,
+    font=('Comic Sans MS', 12, 'bold italic')
 )
 
 
@@ -88,15 +126,19 @@ logging_label = tk.Label(
     textvariable=logging,
     anchor="nw",
     justify="left",
-    width= 1024,
+    width=1024,
+    background="#222",
+    foreground="white",
+    font=('Comic Sans MS', 12, 'bold italic'),
     height=root.winfo_height()-(logging_text_label.winfo_height()+clients.winfo_height()+socket_info_label.winfo_height()+close_button.winfo_height())
 )
 
-clients.grid(row=1, column=0,)
 socket_info_label.grid(row=0, column=0, )
+clients.grid(row=1, column=0,)
+close_button.grid(row=2, column=0 )
+logging_text_label.grid(row=3, column=0, )
 logging_label.grid(row=4, column=0, )
-logging_text_label.grid(row=2, column=0, )
-close_button.grid(row=3, column=0, )
+
 
 
 # ======================================= FUNCTIONS SETTUP =======================================

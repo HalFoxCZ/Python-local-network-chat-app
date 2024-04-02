@@ -20,9 +20,9 @@ def receive_messages(client_socket):
             if "||SERVER||REQUEST_LOGIN||" in message.decode("ascii") or "||SERVER||LOGIN||FAILED||" in message.decode('ascii') or "||SERVER||ONLINE_USER|?|" in message.decode('ascii'):
 
                 if "||SERVER||REQUEST_LOGIN||" in message.decode("ascii") or "||SERVER||LOGIN||FAILED||" in message.decode('ascii'):
-                    login_label.grid(row=0, column=1, columnspan=1)
-                    login_button.grid(row=0, column=6, columnspan=2)
-                    close_button.grid(row=10, column=20, columnspan=5)
+                    login_label.grid(row=1, column=0, )
+                    login_button.grid(row=2, column=0, )
+                    close_button.grid(row=0, column=0, )
                     chat_text.grid_forget()
                     input_user.grid_forget()
                     send_button.grid_forget()
@@ -51,21 +51,25 @@ def send_message(message, s):
             return
         login_label.grid_forget()
         login_button.grid_forget()
-        chat_text.grid(row=1, column=2000, columnspan=10)
-        input_user.grid(row=2, column=1, columnspan=5)
-        send_button.grid(row=2, column=6, columnspan=5)
+        chat_text.grid(row=1, column=0)
+        input_user.grid(row=2, column=0)
+        send_button.grid(row=3, column=0)
         username_text.set(message.split("||CLIENT||LOGIN||RESPONSE|?|")[1])
-        username_label.grid(row=0, column=0, columnspan=1)
+        username_label.grid(row=0, column=2)
     if message == "":
         pass
     s.sendall(message.encode('ascii'))
 
+
 root = tk.Tk()
 root.title("chat-app")
-root.geometry("700x900")
+root.geometry("700x900+%d+%d" % (root.winfo_screenheight(), 0))
 
 set_chat_text = tk.StringVar()
 set_chat_text.set("0")
+
+root.configure(background="#222")
+
 
 
 username_text = tk.StringVar()
@@ -75,19 +79,23 @@ username_label = tk.Label(
     textvariable=username_text,
     height=1,
     width=20,
+
 )
 
 
 login_label = tk.Text(
     root,
     height=1,
-    width=20
+    width=20,
+    borderwidth=2,
+
 )
 
 login_button = tk.Button(
     root,
     text="Login",
-    command=lambda: send_message("||CLIENT||LOGIN||RESPONSE|?|"+login_label.get("1.0", "end-1c"), s)
+    command=lambda: send_message("||CLIENT||LOGIN||RESPONSE|?|"+login_label.get("1.0", "end-1c"), s),
+
 )
 chat_text = tk.Label(
     root,
@@ -103,13 +111,15 @@ input_user = tk.Text(
 send_button = tk.Button(
     root,
     text="Send",
-    command=lambda: send_message(input_user.get("1.0", "end-1c"), s)
+    command=lambda: send_message(input_user.get("1.0", "end-1c"), s),
+
 )
 
 close_button = tk.Button(
     root,
     text="Close",
-    command=lambda: endApp(root, s)
+    command=lambda: endApp(root, s),
+
 
 )
 
@@ -118,9 +128,9 @@ users.set("")
 
 users_label = tk.Label(
     root,
-    textvariable=users
-)
+    textvariable=users,
 
+)
 
 
 def endApp(root, s):
